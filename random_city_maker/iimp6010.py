@@ -143,15 +143,6 @@ def generate_city(n_prob,b_prob):
 
     return city
 
-# change the weights of edges for a certain area. May use threshold to define the edges will be affected.
-def weather(node,graph,dis_thre):
-
-    return
-# Change the weights of edges for some nodes.
-def Population(nodes):
-
-    return
-
 def random_select(nodes_list,num):
     return random.sample(nodes_list,num)
 
