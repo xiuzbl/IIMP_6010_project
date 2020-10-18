@@ -83,7 +83,7 @@ def generate_city(n_prob,b_prob):
                 dic['id'] = chr(ord('@') + i)
                 dic['x'] = g.nodes[node]['x'] + 50
                 dic['y'] = g.nodes[node]['y']
-                dic['num_bikes'] = random.randint(10,80)
+                dic['bikes_diff'] = random.randint(10,80)
                 building_nodes.append(dic)
                 i = i + 1
 
@@ -103,11 +103,11 @@ def generate_city(n_prob,b_prob):
         build_id.append(build['id'])
         build_x.append(build['x'])
         build_y.append(build['y'])
-        build_bikes.append(build['num_bikes'])
+        build_bikes.append(build['bikes_diff'])
 
-    building = {'id': build_id, 'x': build_x, 'y': build_y, 'num_bikes': build_bikes }
+    building = {'id': build_id, 'x': build_x, 'y': build_y, 'bikes_diff': build_bikes }
 
-    buildingnodes = pd.DataFrame(building, columns=['id', 'x', 'y','num_bikes'])
+    buildingnodes = pd.DataFrame(building, columns=['id', 'x', 'y','bikes_diff'])
 
     all_nodes = list(g.nodes)
 #     print(all_nodes)
@@ -170,7 +170,7 @@ def load_city():
     building_nodes = []
     for i, element in buildingnode.iterrows():
         g.nodes[element['id']].update(element[1:].to_dict())
-        dic = {'id': element['id'], 'x': element['x'], 'y': element['y'],'num_bikes': element['num_bikes']}
+        dic = {'id': element['id'], 'x': element['x'], 'y': element['y'],'bikes_diff': element['bikes_diff']}
         building_nodes.append(dic)
 
     city = City()
@@ -198,7 +198,7 @@ def draw_city_on_axes(city,ax):
         ax.add_patch(plt.Rectangle((build['x'] - 15, build['y'] - 55), 35, 35, edgecolor='black', facecolor='none'))
         plt.plot(draw_x, draw_y, color='blue', linewidth=1, alpha=0.2)
 
-        if build['num_bikes']>=30:
+        if build['bikes_diff']>=30:
             plt.text(build['x'], build['y'] - 40, chr(ord('@') + number_id), horizontalalignment='center',
                      verticalalignment='center', fontsize=20, color='darkviolet',weight='bold')
         else:
@@ -234,25 +234,30 @@ def visualize_rain_path(city, paths,degree):
     draw_city_on_axes(city, ax)
     if degree=='heavy':
         color='dodgerblue'
+        w=10
     elif degree=='middle':
         color='deepskyblue'
+        w=7
     else:
         color='lightblue'
+        w=4
     nx.draw_networkx_edges(city.graph, pos=city.node_positions, edgelist=paths, edge_color=color, ax=ax,
-                           width=10,alpha=0.5)
+                           width=w,alpha=0.5)
     plt.axis('square')
     plt.show()
 
-def visualize_busy_path(city, paths,degree):
+def visualize_busy_path(city,paths,degree):
     fig = plt.figure(dpi=200, figsize=[20, 20])
     ax = fig.add_subplot(111)
     draw_city_on_axes(city, ax)
     if degree=='heavy':
         color='red'
+        w=10
     else:
         color='tomato'
+        w=6
     nx.draw_networkx_edges(city.graph, pos=city.node_positions, edgelist=paths, edge_color=color, ax=ax,
-                           width=10, alpha=0.5)
+                           width=w, alpha=0.5)
     plt.axis('square')
     plt.show()
 
